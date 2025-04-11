@@ -1,0 +1,30 @@
+@startuml
+
+:Сотрудник: as employee
+:Клиент: as client
+:Поставщик: as supplier
+
+:Руководитель: as manager
+:Руководитель точки: as p_manager
+:Сотрудник точки: as p_employee
+:Кадровик: as p_HR
+:Продавец: as p_seller
+
+:Физ. лицо: as individual
+:Организация: as organization
+
+:Поставка (Товар): as goods
+:Поставка (Услуга): as service
+
+p_manager -d-> manager
+manager -d-> employee 
+p_employee -d-> employee 
+p_HR -d-> p_employee
+p_seller -d-> p_employee
+
+individual -d-> client 
+organization -d-> client 
+
+goods -d-> supplier 
+service -d-> supplier 
+@enduml

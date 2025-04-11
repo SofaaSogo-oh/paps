@@ -1,0 +1,22 @@
+@startuml
+:Сотрудник: as employee
+:Клиент: as client
+:Поставщик: as supplier
+(регистрация, авторизация) as register
+
+employee -u-> register
+client -u-> register
+supplier -u-> register
+
+rectangle client_cases {
+(Поиск доступных автомобилей) as c1 
+(Бронирование автомобиля) as c2
+(Получение автомобиля в аренду) as c3
+(Возврат автомобиля) as c4
+c2 -d- c1
+c3 -d- c2
+c4 -d- c3
+}
+
+client -r-> c1
+@enduml
