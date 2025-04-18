@@ -1,0 +1,134 @@
+@startuml concept
+
+entity user as "Пользователь" {
+  +id(pk)
+  +login
+  +password
+  +registration_date
+}
+
+entity personal_data as "Персональные данные" {
+  +first_name
+  +last_name
+  +middle_name
+  +phone_number
+  ~date_of_birth
+  ~address
+  +user_id(fk)
+}
+
+entity role as "Роли" {
+  +id(pk)
+  +name
+  ~description
+}
+
+entity privilege as "Привилегии" {
+  +id(pk)
+  +name
+  ~description
+}
+
+entity car as "Автомобиль" {
+  +id(pk)
+  +brand
+  +model
+  +license_plate
+  +rental_price
+  ~description
+}
+
+entity contract as "Договор" {
+  +id(pk)
+  +client_id(fk)
+  +car_id(fk)
+  +employee_id(fk)
+  +contract_date
+  +start_date
+  +end_date
+  +total_amount
+  ~contract_details
+}
+
+entity employee as "Сотрудник" {
+  +user_id(fk)
+}
+
+entity approval_stage as "Стадия согласования" {
+  +id(pk)
+  +stage_name
+  ~description
+}
+
+entity request as "Заявка" {
+  +id(pk)
+  +client_id(fk)
+  +status
+  +date_beg
+  ~date_end
+  request_details
+}
+
+entity request_approval as "Согласование заявки" {
+  +id(pk)
+  +request_id(fk)
+  +approval_stage_id(fk)
+  +employee_id(fk)
+  +approval_date
+  +approval_status // (Approved, Rejected, Pending)
+  ~comments
+}
+
+entity client as "Клиент" {
+  +user_id(fk)
+  +notification_settings
+  +subscription_status
+}
+
+entity rental_store as "Точка проката" {  
+  +id(pk)
+  +address
+  ~description
+}
+
+entity request_status as "Статусы заявок" {
+    +id(pk)
+    +name
+    ~description
+}
+request_status --{ request
+
+' Relationships
+user -- personal_data 
+user -- client 
+user -- employee 
+client --{ contract 
+employee --{ contract 
+car --{ contract 
+role --{ privilege 
+employee --{ role 
+client --{ request 
+request --{ request_approval 
+approval_stage --{ request_approval 
+employee --{ request_approval 
+rental_store --{ car 
+
+
+
+entity role_privilege as "Роль-Привилегия" {
+    +role_id(fk)
+    +privilege_id(fk)
+}
+role --{ role_privilege
+privilege --{ role_privilege
+
+entity employee_role as "Сотрудник-Роль" {
+    +employee_id(fk)
+    +role_id(fk)
+}
+
+employee --{ employee_role
+role --{ employee_role
+
+
+@enduml
