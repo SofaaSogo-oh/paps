@@ -1,0 +1,104 @@
+@startuml
+
+abstract class User {
+    + {abstract} getId(): int
+    + getLogin(): string
+    + setLogin(login: string): void
+    + getRegistrationDate(): date
+    - password: string  // Encapsulated
+}
+
+class Client extends User {
+    - notification_settings: string
+    - subscription_status: string
+    + getId(): int
+    + getNotificationSettings(): string
+    + setNotificationSettings(settings: string): void
+    + getSubscriptionStatus(): string
+    + setSubscriptionStatus(status: string): void
+    + makeRequest(requestDetails: string): Request
+}
+
+class Employee extends User {
+    -RoleList
+    +addRole();
+    + getId(): int
+    + manageContract(contract: Contract): void
+    + CheckPrivelege(Privelege): bool;
+}
+
+class Role {
+    - id: int
+    - name: string
+    - description: string
+    + addPrivilege(privilege: Privilege): void
+    + removePrivilege(privilege: Privilege): void
+}
+
+class Privilege {
+    - id: int
+    - name: string
+    - description: string
+}
+
+class Car {
+    - id: int
+    - brand: string
+    - model: string
+    - license_plate: string
+    - rental_price: decimal
+    - description: string
+    + isAvailable(startDate: date, endDate: date): boolean
+}
+
+class Contract {
+    - id: int
+    - client: Client
+    - car: Car
+    - employee: Employee
+    - request: Request
+    - contract_date: date
+    - start_date: date
+    - end_date: date
+    - total_amount: decimal
+    - contract_details: string
+    + calculateTotalAmount(): decimal
+}
+
+class Request {
+    - id: int
+    - client: Client
+    - status: RequestStatus
+    - date_beg: date
+    - date_end: date
+    - request_details: string
+}
+
+enum RequestStatus {
+    NEW
+    IN_PROGRESS
+    APPROVED
+    REJECTED
+    COMPLETED
+}
+
+class RentalStore {
+    - id: int
+    - address: string
+    - description: string
+    + addCar(car: Car): void
+    + removeCar(car: Car): void
+}
+
+' Relationships - Aggregation/Composition
+Client  --* Request 
+Request  --  Contract 
+Contract --  Client 
+Contract  --  Car 
+Contract  --  Employee 
+Request  *--  RequestStatus 
+Employee *--  Role 
+Role *--  Privilege 
+RentalStore *-- Car
+
+@enduml

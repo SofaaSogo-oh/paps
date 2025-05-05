@@ -43,6 +43,7 @@ entity contract as "Договор" {
   +client_id(fk)
   +car_id(fk)
   +employee_id(fk)
+  +request_id(fk)
   +contract_date
   +start_date
   +end_date
@@ -54,29 +55,13 @@ entity employee as "Сотрудник" {
   +user_id(fk)
 }
 
-entity approval_stage as "Стадия согласования" {
-  +id(pk)
-  +stage_name
-  ~description
-}
-
 entity request as "Заявка" {
   +id(pk)
   +client_id(fk)
-  +status
+  +status_id(fk)
   +date_beg
   ~date_end
   request_details
-}
-
-entity request_approval as "Согласование заявки" {
-  +id(pk)
-  +request_id(fk)
-  +approval_stage_id(fk)
-  +employee_id(fk)
-  +approval_date
-  +approval_status // (Approved, Rejected, Pending)
-  ~comments
 }
 
 entity client as "Клиент" {
@@ -85,7 +70,7 @@ entity client as "Клиент" {
   +subscription_status
 }
 
-entity rental_store as "Точка проката" {  
+entity rental_store as "Точка проката" {
   +id(pk)
   +address
   ~description
@@ -99,19 +84,17 @@ entity request_status as "Статусы заявок" {
 request_status --{ request
 
 ' Relationships
-user -- personal_data 
-user -- client 
-user -- employee 
-client --{ contract 
-employee --{ contract 
-car --{ contract 
-role }--{ privilege 
-employee }--{ role 
-client --{ request 
-request --{ request_approval 
-approval_stage --{ request_approval 
-employee --{ request_approval 
-rental_store --{ car 
+user -- personal_data
+user -- client
+user -- employee
+client --{ contract
+employee --{ contract
+car --{ contract
+role }--{ privilege
+employee }--{ role
+client --{ request
+request -- contract
+rental_store --{ car
 
 
 
